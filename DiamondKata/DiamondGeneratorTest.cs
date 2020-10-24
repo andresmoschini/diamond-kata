@@ -41,13 +41,24 @@ namespace DiamondKata
         }
 
         [DiamondLetterProperty]
+        public void Generator_should_return_a_result_with_all_lines_matching_our_regex(char letter)
+        {
+            var sut = new DiamondGenerator();
+            var result = sut.Generate(letter);
+            var linesAttributes = result.Split('\n').Select(DiamondLineAttributes.Parse);
+            Assert.All(linesAttributes, attrs =>
+            {
+                Assert.True(attrs.MatchesRegex);
+            });
+        }
+
+        [DiamondLetterProperty]
         public void Generator_should_return_an_A_in_the_first_line(char letter)
         {
             var sut = new DiamondGenerator();
             var result = sut.Generate(letter);
-            var firstLine = result.Split('\n').First();
-            Assert.Contains("A", firstLine);
-            Assert.Equal("A", firstLine.Trim());
+            var firstLineAttributes = result.Split('\n').Select(DiamondLineAttributes.Parse).First();
+            Assert.Equal('A', firstLineAttributes.FirstLetter);
         }
 
         [DiamondLetterProperty]
@@ -55,9 +66,8 @@ namespace DiamondKata
         {
             var sut = new DiamondGenerator();
             var result = sut.Generate(letter);
-            var lastLine = result.Split('\n').Last();
-            Assert.Contains("A", lastLine);
-            Assert.Equal("A", lastLine.Trim());
+            var lastLineAttributes = result.Split('\n').Select(DiamondLineAttributes.Parse).Last();
+            Assert.Equal('A', lastLineAttributes.FirstLetter);
         }
 
         [DiamondLetterProperty]
