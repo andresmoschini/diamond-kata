@@ -96,5 +96,20 @@ namespace DiamondKata
                 Assert.Equal(attrs.LeadingSpacesLength, attrs.TrailingSpacesLength);
             });
         }
+
+
+        [DiamondLetterProperty]
+        public void Generator_should_return_a_result_with_the_same_letter_in_a_line(char letter)
+        {
+            var sut = new DiamondGenerator();
+            var result = sut.Generate(letter);
+            var linesAttributes = result.Split('\n').Select(DiamondLineAttributes.Parse);
+
+            Assert.All(linesAttributes, attrs =>
+            {
+                Assert.True(attrs.MatchesRegex);
+                Assert.Equal(attrs.FirstLetter, attrs.LastLetter);
+            });
+        }
     }
 }

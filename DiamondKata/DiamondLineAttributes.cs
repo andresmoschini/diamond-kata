@@ -11,6 +11,7 @@ namespace DiamondKata
         public bool MatchesRegex { get; }
         public int LeadingSpacesLength { get; }
         public char FirstLetter { get; }
+        public char LastLetter { get; }
         public int TrailingSpacesLength { get; }
 
         public static DiamondLineAttributes Parse(string line)
@@ -25,6 +26,7 @@ namespace DiamondKata
             {
                 LeadingSpacesLength = match.Groups[1].Value.Length;
                 FirstLetter = match.Groups[2].Value.FirstOrDefault();
+                LastLetter = match.Groups[5].Value?.Cast<char?>().FirstOrDefault() ?? FirstLetter;
                 TrailingSpacesLength = match.Groups[6].Value.Length;
             }
         }
