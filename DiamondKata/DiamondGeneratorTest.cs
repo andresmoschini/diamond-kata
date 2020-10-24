@@ -111,5 +111,22 @@ namespace DiamondKata
                 Assert.Equal(attrs.FirstLetter, attrs.LastLetter);
             });
         }
+
+        [DiamondLetterProperty]
+        public void Generator_should_return_a_result_with_horizontal_axis_symmetry(char letter)
+        {
+            var sut = new DiamondGenerator();
+            var result = sut.Generate(letter);
+            var lines = result.Split('\n');
+            var middleIndex = lines.Length / 2;
+            var topLines = lines.Take(middleIndex);
+            var bottonLines = lines.TakeLast(middleIndex).Reverse();
+            var zip = Enumerable.Zip(topLines, bottonLines);
+
+            Assert.All(zip, pair =>
+            {
+                Assert.Equal(pair.First, pair.Second);
+            });
+        }
     }
 }
