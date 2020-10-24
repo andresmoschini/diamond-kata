@@ -72,5 +72,19 @@ namespace DiamondKata
                 Assert.Equal(firstLineLength, attrs.TotalLength);
             });
         }
+
+        [DiamondLetterProperty]
+        public void Generator_should_return_a_result_with_vertical_axis_symmetric_leading_and_trailing_spaces(char letter)
+        {
+            var sut = new DiamondGenerator();
+            var result = sut.Generate(letter);
+            var linesAttributes = result.Split('\n').Select(DiamondLineAttributes.Parse);
+
+            Assert.All(linesAttributes, attrs =>
+            {
+                Assert.True(attrs.MatchesRegex);
+                Assert.Equal(attrs.LeadingSpacesLength, attrs.TrailingSpacesLength);
+            });
+        }
     }
 }
