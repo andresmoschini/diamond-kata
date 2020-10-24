@@ -1,0 +1,28 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1
+
+      - name: Install dependencies
+        run: dotnet restore ${{ github.workspace }}
+
+      - name: Build
+        run: dotnet build ${{ github.workspace }}
+
+      - name: Test
+        run: dotnet test
