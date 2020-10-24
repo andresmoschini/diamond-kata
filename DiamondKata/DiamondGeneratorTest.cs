@@ -128,5 +128,25 @@ namespace DiamondKata
                 Assert.Equal(pair.First, pair.Second);
             });
         }
+
+        [DiamondLetterProperty]
+        public void Generator_should_return_a_result_with_line_letters_in_the_correct_order(char letter)
+        {
+            var letters = Utils.GetLetters('A', letter);
+            var expectedLetters = Enumerable.Concat(letters, letters.Reverse().Skip(1));
+
+            var sut = new DiamondGenerator();
+            var result = sut.Generate(letter);
+            var resultLetters = result.Split('\n').Select(DiamondLineAttributes.Parse).Select(x => x.FirstLetter);
+
+            Assert.Equal(expectedLetters.Count(), resultLetters.Count());
+
+            var zip = Enumerable.Zip(expectedLetters, resultLetters);
+
+            Assert.All(zip, pair =>
+            {
+                Assert.Equal(pair.First, pair.Second);
+            });
+        }
     }
 }
