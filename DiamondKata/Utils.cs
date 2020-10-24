@@ -14,5 +14,8 @@ namespace DiamondKata
                 yield return from++;
             }
         }
+
+        public static IEnumerable<T> Mirror<T>(this IEnumerable<T> input)
+            => input.Concat(input.Reverse().Skip(1));
     }
 }

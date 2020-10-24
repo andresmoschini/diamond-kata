@@ -132,8 +132,7 @@ namespace DiamondKata
         [DiamondLetterProperty]
         public void Generator_should_return_a_result_with_line_letters_in_the_correct_order(char letter)
         {
-            var letters = Utils.GetLetters('A', letter);
-            var expectedLetters = Enumerable.Concat(letters, letters.Reverse().Skip(1));
+            var expectedLetters = Utils.GetLetters('A', letter).Mirror();
 
             var sut = new DiamondGenerator();
             var result = sut.Generate(letter);
