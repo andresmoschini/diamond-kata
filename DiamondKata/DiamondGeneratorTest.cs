@@ -59,5 +59,18 @@ namespace DiamondKata
             Assert.Contains("A", lastLine);
             Assert.Equal("A", lastLine.Trim());
         }
+
+        [DiamondLetterProperty]
+        public void Generator_should_return_a_result_with_all_lines_with_the_same_length(char letter)
+        {
+            var sut = new DiamondGenerator();
+            var result = sut.Generate(letter);
+            var linesAttributes = result.Split('\n').Select(DiamondLineAttributes.Parse);
+            var firstLineLength = linesAttributes.First().TotalLength;
+
+            Assert.All(linesAttributes, attrs => {
+                Assert.Equal(firstLineLength, attrs.TotalLength);
+            });
+        }
     }
 }
