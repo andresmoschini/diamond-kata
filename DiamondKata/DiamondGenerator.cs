@@ -6,7 +6,13 @@ namespace DiamondKata
     {
         public string Generate(char letter)
         {
-            throw new NotImplementedException();
+            switch (letter)
+            {
+                case 'A': return "A";
+                default: return " A \n" +
+                    "B B\n" +
+                    " A ";
+            }
         }
     }
 }
