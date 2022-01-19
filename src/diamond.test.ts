@@ -19,7 +19,7 @@ describe(createDiamond.name, () => {
     }
   );
 
-  it.each(toSamples)("should have more than a line", (to) => {
+  it.each(toSamples)("should have more than a line when `to is %i`", (to) => {
     // prepare
     const parameters = { to };
 
