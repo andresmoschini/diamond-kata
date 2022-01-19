@@ -29,4 +29,18 @@ describe(createDiamond.name, () => {
     // assert
     expect(result.length).toBeGreaterThanOrEqual(1);
   });
+
+  it.each(toSamples)(
+    "should return an array with the first line containing 0 when `to is %i`",
+    (to) => {
+      // prepare
+      const parameters = { to };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result[0]).toEqual(expect.stringContaining("0"));
+    }
+  );
 });

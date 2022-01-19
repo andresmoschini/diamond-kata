@@ -4,5 +4,5 @@ type CreateDiamondParametersFunction = (
 ) => string[];
 
 export const createDiamond: CreateDiamondParametersFunction = ({ to }) => {
-  return [""];
+  return ["0"];
 };
