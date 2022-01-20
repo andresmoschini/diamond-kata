@@ -88,4 +88,29 @@ describe(createDiamond.name, () => {
       expect(result[middleLineNumber]).toEqual(`${to}`);
     }
   );
+
+  it("should return the right diamond when `to is 6`", () => {
+    // prepare
+    const parameters = { to: 6 };
+
+    // act
+    const result = createDiamond(parameters);
+
+    // assert
+    expect(result).toEqual([
+      expect.stringMatching(/\s*0\s*/),
+      expect.stringMatching(/\s*(1\s*){1,2}/),
+      expect.stringMatching(/\s*(2\s*){1,2}/),
+      expect.stringMatching(/\s*(3\s*){1,2}/),
+      expect.stringMatching(/\s*(4\s*){1,2}/),
+      expect.stringMatching(/\s*(5\s*){1,2}/),
+      expect.stringMatching(/\s*(6\s*){1,2}/),
+      expect.stringMatching(/\s*(5\s*){1,2}/),
+      expect.stringMatching(/\s*(4\s*){1,2}/),
+      expect.stringMatching(/\s*(3\s*){1,2}/),
+      expect.stringMatching(/\s*(2\s*){1,2}/),
+      expect.stringMatching(/\s*(1\s*){1,2}/),
+      expect.stringMatching(/\s*(0\s*){1,2}/),
+    ]);
+  });
 });
