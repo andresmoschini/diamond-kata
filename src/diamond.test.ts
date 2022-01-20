@@ -45,6 +45,20 @@ describe(createDiamond.name, () => {
   );
 
   it.each(toSamples)(
+    "should return an array with the last line containing 0 when `to is %i`",
+    (to) => {
+      // prepare
+      const parameters = { to };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result[result.length - 1]).toEqual(expect.stringContaining("0"));
+    }
+  );
+
+  it.each(toSamples)(
     "should return twice less one lines when `to is %i`",
     (to) => {
       // prepare
