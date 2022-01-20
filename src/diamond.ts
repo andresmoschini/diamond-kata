@@ -6,10 +6,10 @@ type CreateDiamondParametersFunction = (
 export const createDiamond: CreateDiamondParametersFunction = ({ to }) => {
   const result = [];
   for (let i = 0; i <= to; i++) {
-    result.push(`0`);
+    result.push(`${i}`);
   }
   for (let i = to; i > 0; i--) {
-    result.push(`0`);
+    result.push(`${i}`);
   }
   return result;
 };
