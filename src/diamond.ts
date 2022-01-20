@@ -4,5 +4,12 @@ type CreateDiamondParametersFunction = (
 ) => string[];
 
 export const createDiamond: CreateDiamondParametersFunction = ({ to }) => {
-  return ["0"];
+  const result = [];
+  for (let i = 0; i <= to; i++) {
+    result.push(`0`);
+  }
+  for (let i = to; i > 0; i--) {
+    result.push(`0`);
+  }
+  return result;
 };

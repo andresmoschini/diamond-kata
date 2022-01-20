@@ -43,4 +43,19 @@ describe(createDiamond.name, () => {
       expect(result[0]).toEqual(expect.stringContaining("0"));
     }
   );
+
+  it.each(toSamples)(
+    "should return twice less one lines when `to is %i`",
+    (to) => {
+      // prepare
+      const parameters = { to };
+      const expectedLinesCount = (to + 1) * 2 - 1;
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result.length).toEqual(expectedLinesCount);
+    }
+  );
 });
