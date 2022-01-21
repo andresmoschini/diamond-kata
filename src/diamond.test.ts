@@ -85,7 +85,7 @@ describe(createDiamond.name, () => {
       const result = createDiamond(parameters);
 
       // assert
-      expect(result[middleLineNumber]).toEqual(`${to}`);
+      expect(result[middleLineNumber]).toContain(`${to}`);
     }
   );
 
