@@ -127,7 +127,7 @@ describe(createDiamond.name, () => {
 
       // prepare
       const parameters = { to };
-      const qPrefixRegex = /^(\s*)[^\s]/;
+      const prefixRegex = /^(\s*)[^\s]/;
 
       // act
       const result = createDiamond(parameters);
@@ -136,10 +136,10 @@ describe(createDiamond.name, () => {
       for (let i = 0; i < result.length; i++) {
         const row = result[i];
         const expectedQPrefix = Math.abs(to - i);
-        const qPrefixRegexResult = qPrefixRegex.exec(row);
-        expect(qPrefixRegexResult).not.toBeNull();
-        expect(qPrefixRegexResult?.length).toBe(2);
-        const qPrefix = qPrefixRegexResult?.[1].length;
+        const prefixRegexResult = prefixRegex.exec(row);
+        expect(prefixRegexResult).not.toBeNull();
+        expect(prefixRegexResult?.length).toBe(2);
+        const qPrefix = prefixRegexResult?.[1].length;
         expect(qPrefix).toEqual(expectedQPrefix);
       }
     }
