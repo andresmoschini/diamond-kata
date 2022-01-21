@@ -1,4 +1,8 @@
-import { convertLetterToNumber, convertNumberToLetter, createDiamond } from "./diamond";
+import {
+  convertLetterToNumber,
+  convertNumberToLetter,
+  createDiamond,
+} from "./diamond";
 
 const toSamples = [0, 1, 2, 5, 8, 9];
 
