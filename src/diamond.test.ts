@@ -98,19 +98,19 @@ describe(createDiamond.name, () => {
 
     // assert
     expect(result).toEqual([
-      expect.stringMatching(/      0\s*/),
-      expect.stringMatching(/     1 1\s*/),
-      expect.stringMatching(/    2   2\s*/),
-      expect.stringMatching(/   3     3\s*/),
-      expect.stringMatching(/  4       4\s*/),
-      expect.stringMatching(/ 5         5\s*/),
-      expect.stringMatching(/6           6\s*/),
-      expect.stringMatching(/ 5         5\s*/),
-      expect.stringMatching(/  4       4\s*/),
-      expect.stringMatching(/   3     3\s*/),
-      expect.stringMatching(/    2   2\s*/),
-      expect.stringMatching(/     1 1\s*/),
-      expect.stringMatching(/      0\s*/),
+      "      0      ",
+      "     1 1     ",
+      "    2   2    ",
+      "   3     3   ",
+      "  4       4  ",
+      " 5         5 ",
+      "6           6",
+      " 5         5 ",
+      "  4       4  ",
+      "   3     3   ",
+      "    2   2    ",
+      "     1 1     ",
+      "      0      ",
     ]);
   });
 
@@ -178,6 +178,29 @@ describe(createDiamond.name, () => {
       const lastRow = result[result.length];
       const lastRowPrefixRegexResult = middleRegex.exec(lastRow);
       expect(lastRowPrefixRegexResult?.[1]).toBeUndefined();
+    }
+  );
+
+  it.each(toSamples)(
+    "should return an array with the right spaces between numbers when `to is %i`",
+    (to) => {
+      //       0        | i -> 0 | (to * 2 + 1) -> 7 | row.length -> 7
+      //     1   1      | i -> 1 | (to * 2 + 1) -> 7 | row.length -> 7
+      //   2       2    | i -> 2 | (to * 2 + 1) -> 7 | row.length -> 7
+      // 3           3  | i -> 3 | (to * 2 + 1) -> 7 | row.length -> 7
+      //   2       2    | i -> 4 | (to * 2 + 1) -> 7 | row.length -> 7
+      //     1   1      | i -> 5 | (to * 2 + 1) -> 7 | row.length -> 7
+      //       0        | i -> 6 | (to * 2 + 1) -> 7 | row.length -> 7
+      // prepare
+      const parameters = { to };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      for (var row of result) {
+        expect(row.length).toBe(to * 2 + 1);
+      }
     }
   );
 });
