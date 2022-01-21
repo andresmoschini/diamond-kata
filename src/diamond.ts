@@ -21,3 +21,7 @@ export const createDiamond: CreateDiamondParametersFunction = ({ to }) => {
   }
   return result;
 };
+
+export const convertLetterToNumber = (letter: string) => letter.charCodeAt(0) - "A".charCodeAt(0);
+
+export const convertNumberToLetter = (number: number) => String.fromCharCode(number + "A".charCodeAt(0));

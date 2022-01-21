@@ -1,6 +1,48 @@
-import { createDiamond } from "./diamond";
+import { convertLetterToNumber, convertNumberToLetter, createDiamond } from "./diamond";
 
 const toSamples = [0, 1, 2, 5, 8, 9];
+
+const lettersAndNumbers = [
+  { letter: "A", number: 0 },
+  { letter: "B", number: 1 },
+  { letter: "C", number: 2 },
+  { letter: "F", number: 5 },
+  { letter: "I", number: 8 },
+  { letter: "J", number: 9 },
+  { letter: "N", number: 13 },
+  { letter: "O", number: 14 },
+  { letter: "Z", number: 25 },
+];
+
+describe(convertLetterToNumber.name, () => {
+  it.each(lettersAndNumbers)(
+    "should return $number when input is $letter",
+    ({ letter, number }) => {
+      // arrange
+
+      // act
+      const result = convertLetterToNumber(letter);
+
+      // assert
+      expect(result).toBe(number);
+    }
+  );
+});
+
+describe(convertNumberToLetter.name, () => {
+  it.each(lettersAndNumbers)(
+    "should return $letter when input is $number",
+    ({ letter, number }) => {
+      // arrange
+
+      // act
+      const result = convertNumberToLetter(number);
+
+      // assert
+      expect(result).toBe(letter);
+    }
+  );
+});
 
 describe(createDiamond.name, () => {
   it.each(toSamples)(
