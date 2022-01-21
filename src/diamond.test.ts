@@ -98,19 +98,19 @@ describe(createDiamond.name, () => {
 
     // assert
     expect(result).toEqual([
-      expect.stringMatching(/      (0\s*){1,2}/),
-      expect.stringMatching(/     (1\s*){1,2}/),
-      expect.stringMatching(/    (2\s*){1,2}/),
-      expect.stringMatching(/   (3\s*){1,2}/),
-      expect.stringMatching(/  (4\s*){1,2}/),
-      expect.stringMatching(/ (5\s*){1,2}/),
-      expect.stringMatching(/(6\s*){1,2}/),
-      expect.stringMatching(/ (5\s*){1,2}/),
-      expect.stringMatching(/  (4\s*){1,2}/),
-      expect.stringMatching(/   (3\s*){1,2}/),
-      expect.stringMatching(/    (2\s*){1,2}/),
-      expect.stringMatching(/     (1\s*){1,2}/),
-      expect.stringMatching(/      (0\s*){1,2}/),
+      expect.stringMatching(/      0\s*/),
+      expect.stringMatching(/     1 1\s*/),
+      expect.stringMatching(/    2   2\s*/),
+      expect.stringMatching(/   3     3\s*/),
+      expect.stringMatching(/  4       4\s*/),
+      expect.stringMatching(/ 5         5\s*/),
+      expect.stringMatching(/6           6\s*/),
+      expect.stringMatching(/ 5         5\s*/),
+      expect.stringMatching(/  4       4\s*/),
+      expect.stringMatching(/   3     3\s*/),
+      expect.stringMatching(/    2   2\s*/),
+      expect.stringMatching(/     1 1\s*/),
+      expect.stringMatching(/      0\s*/),
     ]);
   });
 
@@ -142,6 +142,42 @@ describe(createDiamond.name, () => {
         const qPrefix = prefixRegexResult?.[1].length;
         expect(qPrefix).toEqual(expectedQPrefix);
       }
+    }
+  );
+
+  it.each(toSamples)(
+    "should return an array with the right spaces between numbers when `to is %i`",
+    (to) => {
+      //       0        | i -> 0 | (to - abs(to - i)) -> 0 | qMiddle -> 0
+      //     1 . 1      | i -> 1 | (to - abs(to - i)) -> 1 | qMiddle -> 1
+      //   2 . . . 2    | i -> 2 | (to - abs(to - i)) -> 2 | qMiddle -> 3
+      // 3 . . . . . 3  | i -> 3 | (to - abs(to - i)) -> 3 | qMiddle -> 5
+      //   2 . . . 2    | i -> 4 | (to - abs(to - i)) -> 2 | qMiddle -> 3
+      //     1 . 1      | i -> 5 | (to - abs(to - i)) -> 1 | qMiddle -> 1
+      //       0        | i -> 6 | (to - abs(to - i)) -> 0 | qMiddle -> 0
+      // prepare
+      const parameters = { to };
+      const middleRegex = /[^\s](?:(\s+)[^\s])?/;
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      const firstRow = result[0];
+      const firstRowPrefixRegexResult = middleRegex.exec(firstRow);
+      expect(firstRowPrefixRegexResult?.[1]).toBeUndefined();
+      for (let i = 1; i < result.length - 1; i++) {
+        const row = result[i];
+        const expectedQMiddle = (to - Math.abs(to - i)) * 2 - 1;
+        const prefixRegexResult = middleRegex.exec(row);
+        expect(prefixRegexResult).not.toBeNull();
+        expect(prefixRegexResult?.length).toBe(2);
+        const qPrefix = prefixRegexResult?.[1]?.length || 0;
+        expect(qPrefix).toEqual(expectedQMiddle);
+      }
+      const lastRow = result[result.length];
+      const lastRowPrefixRegexResult = middleRegex.exec(lastRow);
+      expect(lastRowPrefixRegexResult?.[1]).toBeUndefined();
     }
   );
 });
