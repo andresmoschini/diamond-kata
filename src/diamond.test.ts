@@ -48,7 +48,7 @@ describe(convertNumberToLetter.name, () => {
   );
 });
 
-describe(createDiamond.name, () => {
+describe(`${createDiamond.name} (numbers)`, () => {
   it.each(toSamples)(
     "should return an array of string when `to is %i`",
     (to) => {
@@ -246,6 +246,212 @@ describe(createDiamond.name, () => {
       // assert
       for (var row of result) {
         expect(row.length).toBe(to * 2 + 1);
+      }
+    }
+  );
+});
+
+describe(`${createDiamond.name} (letters)`, () => {
+  it.each(lettersAndNumbers)(
+    "should return an array of string when `to is $letter`",
+    ({ letter, number }) => {
+      // prepare
+      const parameters = { to: letter };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result).toEqual(
+        expect.arrayContaining([expect.stringContaining("")])
+      );
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should have more than a line when `to is %i`",
+    ({ letter, number }) => {
+      // prepare
+      const parameters = { to: letter };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result.length).toBeGreaterThanOrEqual(1);
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should return an array with the first line containing 0 when `to is %i`",
+    ({ letter, number }) => {
+      // prepare
+      const parameters = { to: letter };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result[0]).toEqual(expect.stringContaining("A"));
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should return an array with the last line containing 0 when `to is %i`",
+    ({ letter, number }) => {
+      // prepare
+      const parameters = { to: letter };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result[result.length - 1]).toEqual(expect.stringContaining("A"));
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should return twice less one lines when `to is %i`",
+    ({ letter, number }) => {
+      // prepare
+      const parameters = { to: letter };
+      const expectedLinesCount = (number + 1) * 2 - 1;
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result.length).toEqual(expectedLinesCount);
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should return an array with the middle line containing to when `to is %i`",
+    ({ letter, number }) => {
+      // prepare
+      const parameters = { to: letter };
+      const expectedLinesCount = (number + 1) * 2 - 1;
+      const middleLineNumber = (expectedLinesCount + 1) / 2 - 1;
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      expect(result[middleLineNumber]).toContain(`${letter}`);
+    }
+  );
+
+  it("should return the right diamond when `to is G`", () => {
+    // prepare
+    const parameters = { to: "G" };
+
+    // act
+    const result = createDiamond(parameters);
+
+    // assert
+    expect(result).toEqual([
+      "      A      ",
+      "     B B     ",
+      "    C   C    ",
+      "   D     D   ",
+      "  E       E  ",
+      " F         F ",
+      "G           G",
+      " F         F ",
+      "  E       E  ",
+      "   D     D   ",
+      "    C   C    ",
+      "     B B     ",
+      "      A      ",
+    ]);
+  });
+
+  it.each(lettersAndNumbers)(
+    "should return an array with as much spaces before the number when `to is %i`",
+    ({ letter, number }) => {
+      // . . . A        | i -> 0 | qPrefix -> 3
+      // . . B   B      | i -> 1 | qPrefix -> 2
+      // . C       C    | i -> 2 | qPrefix -> 1
+      // D           D  | i -> 3 | qPrefix -> 0
+      // . C       C    | i -> 4 | qPrefix -> 1
+      // . . B   B      | i -> 5 | qPrefix -> 2
+      // . . . A        | i -> 6 | qPrefix -> 3
+
+      // prepare
+      const parameters = { to: letter };
+      const prefixRegex = /^(\s*)[^\s]/;
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      for (let i = 0; i < result.length; i++) {
+        const row = result[i];
+        const expectedQPrefix = Math.abs(number - i);
+        const prefixRegexResult = prefixRegex.exec(row);
+        expect(prefixRegexResult).not.toBeNull();
+        expect(prefixRegexResult?.length).toBe(2);
+        const qPrefix = prefixRegexResult?.[1].length;
+        expect(qPrefix).toEqual(expectedQPrefix);
+      }
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should return an array with the right spaces between numbers when `to is %i`",
+    ({ letter, number }) => {
+      //       A        | i -> 0 | (number - abs(number - i)) -> 0 | qMiddle -> 0
+      //     B . B      | i -> 1 | (number - abs(number - i)) -> 1 | qMiddle -> 1
+      //   C . . . C    | i -> 2 | (number - abs(number - i)) -> 2 | qMiddle -> 3
+      // D . . . . . D  | i -> 3 | (number - abs(number - i)) -> 3 | qMiddle -> 5
+      //   C . . . C    | i -> 4 | (number - abs(number - i)) -> 2 | qMiddle -> 3
+      //     B . B      | i -> 5 | (number - abs(number - i)) -> 1 | qMiddle -> 1
+      //       A        | i -> 6 | (number - abs(number - i)) -> 0 | qMiddle -> 0
+      // prepare
+      const parameters = { to: letter };
+      const middleRegex = /[^\s](?:(\s+)[^\s])?/;
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      const firstRow = result[0];
+      const firstRowPrefixRegexResult = middleRegex.exec(firstRow);
+      expect(firstRowPrefixRegexResult?.[1]).toBeUndefined();
+      for (let i = 1; i < result.length - 1; i++) {
+        const row = result[i];
+        const expectedQMiddle = (number - Math.abs(number - i)) * 2 - 1;
+        const prefixRegexResult = middleRegex.exec(row);
+        expect(prefixRegexResult).not.toBeNull();
+        expect(prefixRegexResult?.length).toBe(2);
+        const qPrefix = prefixRegexResult?.[1]?.length || 0;
+        expect(qPrefix).toEqual(expectedQMiddle);
+      }
+      const lastRow = result[result.length];
+      const lastRowPrefixRegexResult = middleRegex.exec(lastRow);
+      expect(lastRowPrefixRegexResult?.[1]).toBeUndefined();
+    }
+  );
+
+  it.each(lettersAndNumbers)(
+    "should return an array with the right spaces between numbers when `to is %i`",
+    ({ letter, number }) => {
+      //       A        | i -> 0 | (number * 2 + 1) -> 7 | row.length -> 7
+      //     B   B      | i -> 1 | (number * 2 + 1) -> 7 | row.length -> 7
+      //   C       C    | i -> 2 | (number * 2 + 1) -> 7 | row.length -> 7
+      // D           D  | i -> 3 | (number * 2 + 1) -> 7 | row.length -> 7
+      //   C       C    | i -> 4 | (number * 2 + 1) -> 7 | row.length -> 7
+      //     B   B      | i -> 5 | (number * 2 + 1) -> 7 | row.length -> 7
+      //       A        | i -> 6 | (number * 2 + 1) -> 7 | row.length -> 7
+      // prepare
+      const parameters = { to: letter };
+
+      // act
+      const result = createDiamond(parameters);
+
+      // assert
+      for (var row of result) {
+        expect(row.length).toBe(number * 2 + 1);
       }
     }
   );
